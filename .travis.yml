@@ -15,7 +15,7 @@ after_success:
   - docker build -t swalbroehl/multi-worker ./worker
   #Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
-  #Take these and push to Docker Hub.
+  #Take these and push to Docker Hub
   - docker push swalbroehl/multi-client
   - docker push swalbroehl/multi-nginx
   - docker push swalbroehl/multi-server
