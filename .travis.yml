@@ -1,0 +1,22 @@
+sudo: required
+service:
+  - docker
+
+before_install:
+  - docker build -t swalbroehl/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run swalbroehl/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t swalbroehl/multi-client ./client
+  - docker build -t swalbroehl/multi-nginx ./nginx
+  - docker build -t swalbroehl/multi-server ./server
+  - docker build -t swalbroehl/multi-worker ./worker
+  #Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" -- password-stdin
+  #Take these and push to Docker Hub
+  - docker push swalbroehl/multi-client
+  - docker push swalbroehl/multi-nginx
+  - docker push swalbroehl/multi-server
+  - docker push swalbroehl/multi-worker
